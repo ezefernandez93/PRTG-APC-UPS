@@ -17,24 +17,27 @@
 use strict;
 use warnings;
 
+# Path to log file, default is default install location
+my $logpath = 'C:\\Program Files (x86)\\APC\\PowerChute Personal Edition\\PCPELog.txt';
+
 # Set up the XML formatting
 print '<?xml version="1.0" encoding="Windows-1252" ?>' . "\n";
 print "<prtg>\n";
 
 # Return charged state as text
-my $command = 'tail -n 50 "C:\\Program Files (x86)\\APC\\PowerChute Personal Edition\\PCPELog.txt" | find "Battery"';
+my $command = 'tail -n 50 "' . $logpath . '" | find "Battery"';
 my @outputs = qx/$command/;
 $outputs[scalar(@outputs) - 1] =~ m/UPS Battery is([\w\s]+)\./;
 print "<text>UPS Battery is " . $1 . "</text>\n";
 
 # Return current load as a channel, with maximum load as a limit
-my $command = 'tail -n 50 "C:\\Program Files (x86)\\APC\\PowerChute Personal Edition\\PCPELog.txt" | find "Watts"';
-my @outputs = qx/$command/;
-$outputs[scalar(@outputs) - 1] =~ m/(\d\d?\d?)\sWatts/;
+my $wcommand = 'tail -n 50 "' . $logpath . '" | find "Watts"';
+my @woutputs = qx/$wcommand/;
+$woutputs[scalar(@woutputs) - 1] =~ m/(\d\d?\d?)\sWatts/;
 my $currentload = $1;
-my $command2 = 'tail -n 50 "C:\\Program Files (x86)\\APC\\PowerChute Personal Edition\\PCPELog.txt" | find "Maximum"';
-my @outputs2 = qx/$command2/;
-$outputs2[scalar(@outputs2) - 1] =~ m/>(\d+)/;
+my $mcommand = 'tail -n 50 "' . $logpath . '" | find "Maximum"';
+my @moutputs = qx/$mcommand/;
+$moutputs[scalar(@moutputs) - 1] =~ m/>(\d+)/;
 my $maxload = $1;
 
 print "<result>\n";
@@ -51,9 +54,9 @@ print "<value>" . $currentload . "</value>\n";
 print "</result>\n";
 
 #Input Voltage
-my $command = 'tail -n 50 "C:\\Program Files (x86)\\APC\\PowerChute Personal Edition\\PCPELog.txt" | find "Input Voltage"';
-my @outputs = qx/$command/;
-$outputs[scalar(@outputs) - 1] =~ m/>(\d+)/;
+my $vcommand = 'tail -n 50 "' . $logpath . '" | find "Input Voltage"';
+my @voutputs = qx/$vcommand/;
+$voutputs[scalar(@voutputs) - 1] =~ m/>(\d+)/;
 print "<result>\n";
 print "<channel>Input Voltage</channel>\n";
 print "<customUnit>volts AC</customUnit>\n";
