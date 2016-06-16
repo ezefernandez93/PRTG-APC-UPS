@@ -1,5 +1,5 @@
 #	Returns XML formatted data for a PRTG sensor from an APC UPS through PowerChute personal edition
-#	Skylar Akemi / https://github.com/homura/
+#	Skylar Gasai / https://github.com/YandereSkylar/PRTG-APC-UPS
 #
 #	This program is free software: you can redistribute it and/or modify
 #	it under the terms of the GNU General Public License as published by
